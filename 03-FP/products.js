@@ -76,20 +76,43 @@ describe('Sort', function(){
 						list[j] = temp;
 					}
 		}
+		var productComparerByValue = function(p1, p2){
+			var p1Value = p1.cost * p1.units,
+				p2Value = p2.cost * p2.units;
+			if (p1Value < p2Value) return -1;
+			if (p1Value === p2Value) return 0;
+			return 1;
+		}
 		describe("Products by value [cost * units] ", function(){
-			var productComparerByValue = function(p1, p2){
-				var p1Value = p1.cost * p1.units,
-					p2Value = p2.cost * p2.units;
-				if (p1Value < p2Value) return -1;
-				if (p1Value === p2Value) return 0;
-				return 1;
-			}
 			sort(products, productComparerByValue);
+			console.table(products);
+		});
+		describe("Products by value [cost * units] in descending", function(){
+			
+			var productComparerByValueDescending = function(p1, p2){
+				return productComparerByValue(p1, p2) * -1;
+			}
+
+			sort(products, productComparerByValueDescending);
 			console.table(products);
 		});
 	});
 	
 });
+
+describe("Filter", function(){
+	describe('Default Filter [stationary products]', function(){
+		function filterStationaryProducts(){
+			var result = [];
+			for(var i=0; i < products.length; i++)
+				if (products[i].category === 'stationary')
+					result.push(products[i]);
+			return result;
+		}
+		var stationaryProducts = filterStationaryProducts();
+		console.table(stationaryProducts);
+	})
+})
 
 
 

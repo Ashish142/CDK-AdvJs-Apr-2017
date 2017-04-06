@@ -3,7 +3,7 @@ Create an object and assign it to a variable 'spinner'
 
 the object should exhibit the following behavior
 */
-var spinner = .....
+var spinner = spinnerFactory();
 
 spinner.up() //=> 1
 spinner.up() //=> 2
@@ -16,11 +16,19 @@ spinner.down() //=> 1
 spinner.down() //=> 0
 spinner.down() //=> -1
 
-var counter = 0;
+function spinnerFactory(){
+	var counter = 0;
 
-function up(){
-	return ++counter;
+	function up(){
+		return ++counter;
+	}
+
+	function down(){
+		return --counter;
+	}
+
+	return {
+		up : up,
+		down : down
+	}
 }
-
-function down
-

@@ -1,5 +1,5 @@
 var products = [
-	{id : 5, name : 'Pen', cost : 80, units : 20, category : 'stationary'},
+	{id : 5, name : 'Pen', cost : 45, units : 20, category : 'stationary'},
 	{id : 8, name : 'Len', cost : 40, units : 10, category : 'grocery'},
 	{id : 2, name : 'Pencil', cost : 70, units : 50, category : 'stationary'},
 	{id : 6, name : 'Rice', cost : 40, units : 60, category : 'grocyer'},
@@ -111,8 +111,63 @@ describe("Filter", function(){
 		}
 		var stationaryProducts = filterStationaryProducts();
 		console.table(stationaryProducts);
-	})
-})
+	});
+
+	describe("Any list by any criteria", function(){
+		function filter(list, criteriaFn){
+			var result = [];
+			for(var i=0; i < list.length; i++)
+				if (criteriaFn(list[i]))
+					result.push(list[i]);
+			return result;
+		};
+
+		function negate(criteriaFn){
+			return function(){
+				return !criteriaFn.apply(this, arguments);
+			}	
+		}
+
+		describe("Filter products by category", function(){
+			var stationaryProductCriteria = function(product){
+				return product.category === 'stationary';
+			};
+
+			/*var nonStationaryProductCriteria = function(product){
+				return !stationaryProductCriteria(product);
+			};*/
+			var nonStationaryProductCriteria = negate(stationaryProductCriteria);
+
+			describe("All stationary products", function(){
+				var stationaryProducts  = filter(products, stationaryProductCriteria);
+				console.table(stationaryProducts);
+			});
+			describe('All NON stationary products', function(){
+				var nonStaionaryProducts = filter(products, nonStationaryProductCriteria);
+				console.table(nonStaionaryProducts);
+			});
+		});
+
+		describe("Filter products by cost", function(){
+			var costlyProductCriteria = function(product){
+				return product.cost > 50;
+			};
+			/*var affordableProductCriteria = function(product){
+				return !costlyProductCriteria(product);
+			}*/
+			var affordableProductCriteria = negate(costlyProductCriteria);
+
+			describe("All costly products", function(){
+				var costlyProducts = filter(products, costlyProductCriteria);
+				console.table(costlyProducts);
+			})
+			describe("All affordable products", function(){
+				var affordableProducts = filter(products, affordableProductCriteria);
+				console.table(affordableProducts);
+			});
+		});
+	});
+});
 
 
 
